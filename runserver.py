@@ -13,6 +13,10 @@ def runserver():
     args = parser.parse_args()
 
     path = args.path
+    if not os.path.exists(os.path.join(path, "manage.py")):
+        env = os.environ.copy()
+        path = env.get("DJANGO_PROJECT_ROOT", path)
+
     if not args.skip_check_path:
         while not os.path.exists(os.path.join(path, "manage.py")):
             os.system("cls" if os.name == "nt" else "clear")

@@ -27,7 +27,12 @@ def deploy():
 
     args = parser.parse_args()
 
+    env = os.environ.copy()
+
     path = args.path
+    if not os.path.exists(os.path.join(path, "manage.py")):
+        path = env.get("DJANGO_PROJECT_ROOT", path)
+
     if not args.skip_check_path:
         while not os.path.exists(os.path.join(path, "manage.py")):
             os.system("cls" if os.name == "nt" else "clear")
@@ -57,7 +62,6 @@ def deploy():
             if not args.password:
                 args.password = getpass.getpass("> Введите пароль суперпользователя: ").strip()
 
-            env = os.environ.copy()
             env["DJANGO_SUPERUSER_PASSWORD"] = args.password
 
             run_command(
